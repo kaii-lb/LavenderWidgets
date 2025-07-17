@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lavender Widgets</string>
+    <string name="clock_widget_desc">This is a clock</string>
+    <string name="music_widget_desc">Control your music playback</string>
+</resources>
