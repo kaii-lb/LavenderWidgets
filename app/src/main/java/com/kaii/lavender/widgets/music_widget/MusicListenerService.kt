@@ -66,6 +66,12 @@ class MusicListenerService : NotificationListenerService() {
         if (mediaController != null) {
             mediaController!!.registerCallback(mediaControllerCallback)
             currentPosition = mediaController?.playbackState?.position ?: 0L
+
+            if (mediaController?.playbackState?.state == PlaybackState.STATE_PLAYING) {
+                isPolling = true
+                handler.removeCallbacks(updatePositionRunnable)
+                handler.post(updatePositionRunnable)
+            }
         }
 
         updateGlanceWidgetUI()
@@ -105,6 +111,13 @@ class MusicListenerService : NotificationListenerService() {
             mediaController?.registerCallback(mediaControllerCallback)
 
             currentPosition = mediaController?.playbackState?.position ?: 0L
+
+            if (mediaController?.playbackState?.state == PlaybackState.STATE_PLAYING) {
+                isPolling = true
+                handler.removeCallbacks(updatePositionRunnable)
+                handler.post(updatePositionRunnable)
+            }
+
             updateGlanceWidgetUI()
         } else {
             mediaController?.unregisterCallback(mediaControllerCallback)
@@ -134,11 +147,10 @@ class MusicListenerService : NotificationListenerService() {
                     currentPosition = calculatedPosition
 
                     updateGlanceWidgetUI()
+                    handler.postDelayed(this, 1000)
                 } else {
                     isPolling = false
                 }
-
-                handler.postDelayed(this, 1000)
             }
         }
     }
